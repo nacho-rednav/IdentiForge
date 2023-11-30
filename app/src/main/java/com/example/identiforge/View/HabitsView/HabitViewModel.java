@@ -14,6 +14,7 @@ import com.example.identiforge.Model.Identity;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 
 public class HabitViewModel extends ViewModel {
@@ -48,13 +49,13 @@ public class HabitViewModel extends ViewModel {
         controller.completeHabit(habit, day);
     }
 
-    public HashMap<Integer, Boolean> getCompletedHabitsMap(String day) {
-        HashMap<Integer, Boolean> result = new HashMap<>();
+    public HashSet<Integer> getCompletedHabitsMap(String day) {
+        HashSet<Integer> result = new HashSet<>();
         List<CompletedHabit> completedHabits = controller.getCompletedHabits(day);
-
+        Log.d("fd", "VM List: " + completedHabits);
         if(completedHabits!= null){
             for(CompletedHabit ch : completedHabits){
-                result.put(ch.getHabitId(), true);
+                result.add(ch.getHabitId());
             }
         }
 

@@ -25,4 +25,7 @@ public interface HabitDAO {
 
     @RawQuery(observedEntities = Habit.class)
     LiveData<List<Habit>> getHabits(SupportSQLiteQuery habitDayQuery);
+
+    @RawQuery
+    List<Habit> getHabitsSynchronous(SupportSQLiteQuery habitDayQuery);
 }

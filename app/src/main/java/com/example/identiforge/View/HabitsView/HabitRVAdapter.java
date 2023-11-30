@@ -21,18 +21,22 @@ import com.example.identiforge.View.IdentityView.IdentityRVAdapter;
 import com.example.identiforge.View.MainActivity;
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class HabitRVAdapter extends ListAdapter<Habit, HabitRVAdapter.ViewHolder> {
 
     private MainActivity parent;
-    private HashMap<Integer, Boolean> completedHabitIdMap;
+    private HashSet<Integer> completedHabitIdMap;
     public HabitRVAdapter(MainActivity parent) {
         super(DIFF_CALLBACK);
         this.parent = parent;
         completedHabitIdMap = parent.getCompletedHabitMap();
     }
 
-    public void refreshHabitIdMap(){completedHabitIdMap = parent.getCompletedHabitMap();}
+    public void setHabitIdMap(HashSet<Integer> map){
+        Log.d("fd", "RVA Map: " + map);
+        completedHabitIdMap = map;
+    }
     private static final DiffUtil.ItemCallback<Habit> DIFF_CALLBACK = new DiffUtil.ItemCallback<Habit>() {
         @Override
         public boolean areItemsTheSame(Habit oldItem, Habit newItem) {
@@ -67,9 +71,11 @@ public class HabitRVAdapter extends ListAdapter<Habit, HabitRVAdapter.ViewHolder
 
         holder.titleTV.setText(habit.getTile());
         holder.pointsTV.setText("Points: " + habit.getPoints());
-        if(completedHabitIdMap.get(habit.getId()) != null &&
-                completedHabitIdMap.get(habit.getId())){
+        if(completedHabitIdMap.contains(habit.getId())){
             holder.imageCheck.setImageResource(R.drawable.checked);
+        }
+        else{
+            holder.imageCheck.setImageResource(R.drawable.unchecked);
         }
     }
 
@@ -92,10 +98,10 @@ public class HabitRVAdapter extends ListAdapter<Habit, HabitRVAdapter.ViewHolder
                 @Override
                 public void onClick(View v) {
                     Habit h = getItem(getAdapterPosition());
-                    if(completedHabitIdMap.get(h.getId()) == null || !completedHabitIdMap.get(h.getId())){
+                    if(!completedHabitIdMap.contains(h.getId())){
                         parent.completeHabit(h);
                         imageCheck.setImageResource(R.drawable.checked);
-                        completedHabitIdMap.put(h.getId(), true);
+                        completedHabitIdMap.add(h.getId());
                         Toast.makeText(parent, "Great, you earned " + h.getPoints() + " points!", Toast.LENGTH_SHORT).show();
                     }
                     else{

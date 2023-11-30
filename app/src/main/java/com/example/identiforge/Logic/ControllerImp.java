@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.identiforge.Model.CompletedHabit;
@@ -22,13 +23,19 @@ public class ControllerImp extends Controller{
 
     private IdentiForgeDB db;
     private LiveData<List<Identity>> identities;
-    private LiveData<List<Habit>> habits;
+    private LiveData<List<Habit>> liveHabits;
+    private MutableLiveData<List<Habit>> mutableHabits;
+    private MediatorLiveData<List<Habit>> mergedLiveHabitData;
 
     public ControllerImp(Application app){
         db = IdentiForgeDB.get(app);
         identities = db.identityDAO().getIdentities();
-        habits = db.habitDAO()
+        liveHabits = db.habitDAO()
                 .getHabits(Helper.getHabitDayQuery(DateHelper.getCurrentWekDay(DateHelper.getCurrentDate())));
+        mutableHabits = new MutableLiveData<>();
+        mergedLiveHabitData = new MediatorLiveData<>();
+        mergedLiveHabitData.addSource(liveHabits, value -> mergedLiveHabitData.setValue(value));
+        mergedLiveHabitData.addSource(mutableHabits, value -> mergedLiveHabitData.setValue(value));
     }
 
     @Override
@@ -99,12 +106,16 @@ public class ControllerImp extends Controller{
 
     @Override
     public LiveData<List<Habit>> getHabits() {
-        return habits;
+        return mergedLiveHabitData;
     }
 
     @Override
     public void refreshHabits(String day) {
-
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        service.execute(() -> {
+            List<Habit> list = db.habitDAO().getHabitsSynchronous(Helper.getHabitDayQuery(DateHelper.getCurrentWekDay(day)));
+            mutableHabits.postValue(list);
+        });
     }
 
     @Override

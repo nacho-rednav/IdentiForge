@@ -35,10 +35,12 @@ import com.example.identiforge.View.ResultContracts.CreateHabitResultContract;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -73,8 +75,13 @@ public class MainActivity extends AppCompatActivity {
         ExecutorService service = Executors.newSingleThreadExecutor(new PriorityThreadFactory(Thread.MAX_PRIORITY));
         service.execute(() -> {
             habitAdapter = new HabitRVAdapter(this);
-            habitRV.setAdapter(habitAdapter);
         });
+        try {
+            service.awaitTermination(1, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        habitRV.setAdapter(habitAdapter);
         initItemTouchHelper();
         habitViewModel.getHabits().observe(this, new Observer<List<Habit>>() {
             @Override
@@ -88,16 +95,30 @@ public class MainActivity extends AppCompatActivity {
         nextDayButt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String prevDay = selectedDay;
                 selectedDay = DateHelper.nextDay(selectedDay);
-                reload();
+                try{
+                    reload();
+                }
+                catch (InterruptedException ex){
+                    Log.d("Error", ex.getMessage());
+                    selectedDay = prevDay;
+                }
             }
         });
         ImageView prevDayButt = findViewById(R.id.main_prevDate);
         prevDayButt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String prevDay = selectedDay;
                 selectedDay = DateHelper.prevDay(selectedDay);
-                reload();
+                try{
+                    reload();
+                }
+                catch (InterruptedException ex){
+                    Log.d("Error", ex.getMessage());
+                    selectedDay = prevDay;
+                }
             }
         });
 
@@ -163,19 +184,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void completeHabit(Habit h) {
+        Log.d("fd", "OHOO: " + h.getTile() +" " + h.getId());
         habitViewModel.completeHabit(h, selectedDay);
     }
     public void deleteHabit(Habit h){habitViewModel.deleteHabit(h);}
 
-    private void reload() {
+    private void reload() throws InterruptedException {
         setDate();
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                habitAdapter.refreshHabitIdMap();
-                habitViewModel.refreshHabits(selectedDay);
-            }
+        ExecutorService service = Executors.newSingleThreadExecutor(new PriorityThreadFactory(Thread.MAX_PRIORITY));
+        service.execute(() -> {
+            habitAdapter.setHabitIdMap(getCompletedHabitMap());
         });
+
+        habitViewModel.refreshHabits(selectedDay);
     }
 
     public void launchEditHabit(Habit habit) {
@@ -200,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public HashMap<Integer, Boolean> getCompletedHabitMap() {
+    public HashSet<Integer> getCompletedHabitMap() {
         return habitViewModel.getCompletedHabitsMap(selectedDay);
     }
 

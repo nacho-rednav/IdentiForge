@@ -35,4 +35,8 @@ public class CompletedHabit {
     public void setHabitId(int habitId) {
         this.habitId = habitId;
     }
+
+    public String toString(){
+        return "Id: " + id + " Date: " + day;
+    }
 }
