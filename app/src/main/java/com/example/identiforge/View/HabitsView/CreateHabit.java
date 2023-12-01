@@ -37,10 +37,10 @@ public class CreateHabit extends AppCompatActivity {
     public static final String SATUR_EXTRA = "satur";
     public static final String SUN_EXTRA = "sun";
 
-    boolean editing;
+    private boolean editing;
     private int id;
 
-    String identitySelected;
+    private String identitySelected;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -1,6 +1,7 @@
 package com.example.identiforge.Model;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity
@@ -19,6 +20,8 @@ public class Habit {
     private boolean friday;
     private boolean saturday;
     private boolean sunday;
+    @Ignore
+    private boolean done;
 
     public Habit(String tile, String description, int identityId, int points, boolean monday, boolean tuesday, boolean wednesday, boolean thursday, boolean friday, boolean saturday, boolean sunday) {
         this.tile = tile;
@@ -32,8 +35,15 @@ public class Habit {
         this.friday = friday;
         this.saturday = saturday;
         this.sunday = sunday;
+        done = false;
+    }
+    public boolean isDone() {
+        return done;
     }
 
+    public void setDone(boolean done) {
+        this.done = done;
+    }
     public int getId() {
         return id;
     }

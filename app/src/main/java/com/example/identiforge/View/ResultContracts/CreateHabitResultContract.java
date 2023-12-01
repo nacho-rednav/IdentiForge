@@ -53,8 +53,6 @@ public class CreateHabitResultContract extends ActivityResultContract<Pair<Habit
     public Pair<Pair<Habit,String>, Boolean> parseResult(int i, @Nullable Intent intent) {
         Pair<Pair<Habit,String>, Boolean> res = null;
 
-        //Para edit checkear EDIT_EXTRA, asignar id y passar edit bool en el second del pair
-
         if(i == RESULT_OK && intent != null){
             String title = intent.getStringExtra(CreateHabit.TITLE_EXTRA);
             String desc = intent.getStringExtra(CreateHabit.DESC_EXTRA);

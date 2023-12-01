@@ -13,6 +13,7 @@ import com.example.identiforge.Model.Habit;
 import com.example.identiforge.Model.Helper;
 import com.example.identiforge.Model.IdentiForgeDB;
 import com.example.identiforge.Model.Identity;
+import com.example.identiforge.Model.Task;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,19 +24,24 @@ public class ControllerImp extends Controller{
 
     private IdentiForgeDB db;
     private LiveData<List<Identity>> identities;
-    private LiveData<List<Habit>> liveHabits;
     private MutableLiveData<List<Habit>> mutableHabits;
-    private MediatorLiveData<List<Habit>> mergedLiveHabitData;
+    private MutableLiveData<List<Task>> mutableTasks;
 
     public ControllerImp(Application app){
         db = IdentiForgeDB.get(app);
+
         identities = db.identityDAO().getIdentities();
-        liveHabits = db.habitDAO()
-                .getHabits(Helper.getHabitDayQuery(DateHelper.getCurrentWekDay(DateHelper.getCurrentDate())));
+
         mutableHabits = new MutableLiveData<>();
-        mergedLiveHabitData = new MediatorLiveData<>();
-        mergedLiveHabitData.addSource(liveHabits, value -> mergedLiveHabitData.setValue(value));
-        mergedLiveHabitData.addSource(mutableHabits, value -> mergedLiveHabitData.setValue(value));
+        mutableTasks = new MutableLiveData<>();
+
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        service.execute(() -> {
+            mutableHabits.postValue(db.habitDAO()
+                    .getHabitsSynchronous(Helper.getHabitDayQuery(DateHelper.getCurrentWekDay(DateHelper.getCurrentDate()))));
+
+            mutableTasks.postValue(db.taskDAO().getTasks(DateHelper.getTimeStamp(DateHelper.getCurrentDate())));
+        });
     }
 
     @Override
@@ -81,32 +87,38 @@ public class ControllerImp extends Controller{
     }
 
     @Override
-    public void insertHabit(Habit habit) {
+    public void insertHabit(Habit habit, String day) {
         ExecutorService service = Executors.newSingleThreadExecutor();
         service.execute(() -> {
             db.habitDAO().insertHabit(habit);
+            List<Habit> list = db.habitDAO().getHabitsSynchronous(Helper.getHabitDayQuery(DateHelper.getCurrentWekDay(day)));
+            mutableHabits.postValue(list);
         });
     }
 
     @Override
-    public void updateHabit(Habit habit) {
+    public void updateHabit(Habit habit, String day) {
         ExecutorService service = Executors.newSingleThreadExecutor();
         service.execute(() -> {
             db.habitDAO().updateHabit(habit);
+            List<Habit> list = db.habitDAO().getHabitsSynchronous(Helper.getHabitDayQuery(DateHelper.getCurrentWekDay(day)));
+            mutableHabits.postValue(list);
         });
     }
 
     @Override
-    public void deleteHabit(Habit habit) {
+    public void deleteHabit(Habit habit, String day) {
         ExecutorService service = Executors.newSingleThreadExecutor();
         service.execute(() -> {
             db.habitDAO().deleteHabit(habit);
+            List<Habit> list = db.habitDAO().getHabitsSynchronous(Helper.getHabitDayQuery(DateHelper.getCurrentWekDay(day)));
+            mutableHabits.postValue(list);
         });
     }
 
     @Override
     public LiveData<List<Habit>> getHabits() {
-        return mergedLiveHabitData;
+        return mutableHabits;
     }
 
     @Override
@@ -133,6 +145,66 @@ public class ControllerImp extends Controller{
     @Override
     public List<CompletedHabit> getCompletedHabits(String day) {
         return db.completedHabitDAO().getCompletedHabits(day);
+    }
+
+    @Override
+    public void insertTask(Task task, String day) {
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        service.execute(() -> {
+            Log.d("D","TASK dia: " + task.getDay());
+            Log.d("D","dia: " + day);
+            db.taskDAO().insertTask(task);
+            List<Task> list = db.taskDAO().getTasks(DateHelper.getTimeStamp(day));
+            mutableTasks.postValue(list);
+        });
+    }
+
+    @Override
+    public void updateTask(Task task, String day) {
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        service.execute(() -> {
+            Log.d("D", "UPDATE: " + task.getDay());
+            db.taskDAO().updateTask(task);
+            List<Task> list = db.taskDAO().getTasks(DateHelper.getTimeStamp(day));
+            mutableTasks.postValue(list);
+        });
+    }
+
+    @Override
+    public void deleteTask(Task task, String day) {
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        service.execute(() -> {
+            db.taskDAO().deleteTask(task);
+            List<Task> list = db.taskDAO().getTasks(DateHelper.getTimeStamp(day));
+            mutableTasks.postValue(list);
+        });
+    }
+
+    @Override
+    public LiveData<List<Task>> getTasks(String day) {
+        return mutableTasks;
+    }
+
+    @Override
+    public void refreshTasks(String day) {
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        service.execute(() -> {
+            List<Task> list = db.taskDAO().getTasks(DateHelper.getTimeStamp(day));
+            Log.d("D","Taskssize: " + list);
+            mutableTasks.postValue(list);
+        });
+    }
+
+    @Override
+    public void completeTask(Task task, String day) {
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        service.execute(() -> {
+            db.taskDAO().deleteTask(task);
+            db.identityDAO().addPoints(task.getIdentityId(), task.getPoints());
+            List<Task> list = db.taskDAO().getTasks(DateHelper.getTimeStamp(day));
+            mutableTasks.postValue(list);
+        });
+
     }
 
     @Override

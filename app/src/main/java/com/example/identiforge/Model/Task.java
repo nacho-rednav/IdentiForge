@@ -1,6 +1,7 @@
 package com.example.identiforge.Model;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.time.LocalDate;
@@ -15,14 +16,15 @@ public class Task {
     private String description;
     private int identityId;
     private int points;
-    private String day;
+    private long timestamp;
+    @Ignore private String day;
 
-    public Task(String title, String description, int identityId, int points, String day) {
+    public Task(String title, String description, int identityId, int points, long timestamp) {
         this.title = title;
         this.description = description;
         this.identityId = identityId;
         this.points = points;
-        this.day = day;
+        this.timestamp = timestamp;
     }
 
     public int getId() {
@@ -71,5 +73,13 @@ public class Task {
 
     public void setDay(String day) {
         this.day = day;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 }

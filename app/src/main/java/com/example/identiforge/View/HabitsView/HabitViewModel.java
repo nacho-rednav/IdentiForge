@@ -25,16 +25,16 @@ public class HabitViewModel extends ViewModel {
         controller = Controller.get(app);
         list = controller.getHabits();
     }
-    public void insertHabit(Habit habit) {
-        controller.insertHabit(habit);
+    public void insertHabit(Habit habit, String day) {
+        controller.insertHabit(habit, day);
     }
 
-    public void updateHabit(Habit habit) {
-        controller.updateHabit(habit);
+    public void updateHabit(Habit habit, String day) {
+        controller.updateHabit(habit, day);
     }
 
-    public void deleteHabit(Habit habit) {
-        controller.deleteHabit(habit);
+    public void deleteHabit(Habit habit, String day) {
+        controller.deleteHabit(habit, day);
     }
 
     public LiveData<List<Habit>> getHabits() {

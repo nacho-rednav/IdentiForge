@@ -93,6 +93,22 @@
 
         </FrameLayout>
 
+        <FrameLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/border_background">
+
+            <ImageView
+                android:id="@+id/main_taskButt"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:src="@drawable/task" />
+
+        </FrameLayout>
+
 
 
 

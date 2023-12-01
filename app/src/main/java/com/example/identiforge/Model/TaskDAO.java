@@ -22,6 +22,6 @@ public interface TaskDAO {
     @Delete
     void deleteTask(Task task);
 
-    @Query("SELECT * FROM Task WHERE day = :day")
-    LiveData<List<Task>> getTasks(String day);
+    @Query("SELECT * FROM Task WHERE timestamp = :timestamp")
+    List<Task> getTasks(long timestamp);
 }
