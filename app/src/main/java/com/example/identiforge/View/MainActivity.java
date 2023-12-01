@@ -2,6 +2,7 @@ package com.example.identiforge.View;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -35,12 +36,9 @@ import com.example.identiforge.View.TasksView.TaskViewModel;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,14 +51,23 @@ public class MainActivity extends AppCompatActivity {
     private TaskViewModel taskViewModel;
     private RecyclerView taskRV;
     private TaskRVAdapter taskAdapter;
-
+    private HashSet<Pair<Integer, Long>> completedHabits;
     private String selectedDay;
+    private long prevTimeStamp;
+    private long postTimeStamp;
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        reload();
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         selectedDay = DateHelper.getCurrentDate();
+        setDayLimits();
+
 
         habitActivityResultLauncher = registerForActivityResult(new CreateHabitResultContract(),
                 result -> {
@@ -83,7 +90,16 @@ public class MainActivity extends AppCompatActivity {
         habitViewModel.getHabits().observe(this, new Observer<List<Habit>>() {
             @Override
             public void onChanged(List<Habit> habits) {
-                habitAdapter.submitList(habits);
+                seeChecked(habits);
+                //habitAdapter.submitList(habits);
+            }
+        });
+
+        ExecutorService service = Executors.newSingleThreadExecutor(new PriorityThreadFactory(Thread.MAX_PRIORITY));
+        service.execute(new Runnable() {
+            @Override
+            public void run() {
+                loadSetFrom();
             }
         });
 
@@ -109,16 +125,24 @@ public class MainActivity extends AppCompatActivity {
         nextDayButt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectedDay = DateHelper.nextDay(selectedDay);
-                reload();
+                selectedDay = DateHelper.addDays(selectedDay, 1);
+                if(DateHelper.getTimeStamp(selectedDay) > postTimeStamp){
+                    loadSetFrom();
+                }
+                else
+                    reload();
             }
         });
         ImageView prevDayButt = findViewById(R.id.main_prevDate);
         prevDayButt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectedDay = DateHelper.prevDay(selectedDay);
-                reload();
+                selectedDay = DateHelper.addDays(selectedDay, -1);
+                if(DateHelper.getTimeStamp(selectedDay) < prevTimeStamp){
+                    loadSetFrom();
+                }
+                else
+                    reload();
             }
         });
 
@@ -167,13 +191,30 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void seeChecked(List<Habit> list) throws InterruptedException {
+    private void setDayLimits() {
+        prevTimeStamp = DateHelper.getTimeStamp(DateHelper.addDays(selectedDay, -15));
+        postTimeStamp = DateHelper.getTimeStamp(DateHelper.addDays(selectedDay, 15));
+    }
 
-        //Somehow check what is done and what is not
+    private void loadSetFrom() {
+        ExecutorService service = Executors.newSingleThreadExecutor(new PriorityThreadFactory(Thread.MAX_PRIORITY));
+        service.execute(() -> {
+            completedHabits = habitViewModel.loadSetFrom(selectedDay);
+            seeChecked(habitAdapter.getCurrentList());
+            setDayLimits();
+        });
+    }
 
+    private void seeChecked(List<Habit> list) {
+        long tmsp = DateHelper.getTimeStamp(selectedDay);
+        for(Habit h : list){
+            if(completedHabits.contains(new Pair<>(h.getId(), tmsp))){
+                h.setDone(true);
+            }
+        }
         habitAdapter.submitList(list);
-        habitRV.setAdapter(null);
-        habitRV.setAdapter(habitAdapter);
+        //habitRV.setAdapter(null);
+        //habitRV.setAdapter(habitAdapter);
     }
 
     private void setDate() {
@@ -239,6 +280,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void completeHabit(Habit h) {
         habitViewModel.completeHabit(h, selectedDay);
+        completedHabits.add(new Pair<>(h.getId(), DateHelper.getTimeStamp(selectedDay)));
     }
     public void completeTask(Task t) {
         taskViewModel.completeTask(t, selectedDay);
@@ -321,7 +363,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }).attachToRecyclerView(taskRV);
     }
-
 
 
     class PriorityThreadFactory implements ThreadFactory {

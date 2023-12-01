@@ -2,6 +2,7 @@ package com.example.identiforge.View.HabitsView;
 
 import android.app.Application;
 import android.util.Log;
+import android.util.Pair;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -73,5 +74,17 @@ public class HabitViewModel extends ViewModel {
     public String getIdentityString(int identityId) {
         Identity idTitle = controller.getIdentity(identityId);
         return idTitle.getTitle();
+    }
+
+    public HashSet<Pair<Integer, Long>> loadSetFrom(String selectedDay) {
+        HashSet<Pair<Integer, Long>> result = new HashSet<>();
+        List<CompletedHabit> completedHabits = controller.getCompletedHabits(selectedDay);
+        Log.d("fd", "VM List: " + completedHabits);
+        if(completedHabits!= null){
+            for(CompletedHabit ch : completedHabits){
+                result.add(new Pair<>(ch.getHabitId(), ch.getTimestamp()));
+            }
+        }
+        return result;
     }
 }

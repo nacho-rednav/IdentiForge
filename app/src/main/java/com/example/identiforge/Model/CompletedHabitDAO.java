@@ -13,6 +13,6 @@ public interface CompletedHabitDAO {
     @Insert
     void insert(CompletedHabit ch);
 
-    @Query("SELECT * FROM CompletedHabit WHERE day = :day")
-    List<CompletedHabit> getCompletedHabits(String day);
+    @Query("SELECT * FROM CompletedHabit WHERE timestamp >= :min AND timestamp <= :max")
+    List<CompletedHabit> getCompletedHabits(long min, long max);
 }

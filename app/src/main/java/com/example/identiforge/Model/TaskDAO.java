@@ -24,4 +24,7 @@ public interface TaskDAO {
 
     @Query("SELECT * FROM Task WHERE timestamp = :timestamp")
     List<Task> getTasks(long timestamp);
+
+    @Query("DELETE FROM Task WHERE identityId = :id")
+    void deleteForgingTasks(int id);
 }

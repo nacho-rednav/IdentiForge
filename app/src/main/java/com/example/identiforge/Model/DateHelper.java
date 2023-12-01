@@ -37,26 +37,12 @@ public class DateHelper {
         return weekday.toLowerCase(Locale.ENGLISH);
     }
 
-    public static String nextDay(String selectedDay) {
+    public static String addDays(String selectedDay, int add) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
         try {
             LocalDate date = LocalDate.parse(selectedDay, formatter);
-            LocalDate nextDay = date.plusDays(1);
-            return nextDay.format(formatter);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return selectedDay;
-        }
-    }
-
-    public static String prevDay(String selectedDay) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-
-        try {
-            LocalDate date = LocalDate.parse(selectedDay, formatter);
-            LocalDate nextDay = date.plusDays(-1);
+            LocalDate nextDay = date.plusDays(add);
             return nextDay.format(formatter);
 
         } catch (Exception e) {

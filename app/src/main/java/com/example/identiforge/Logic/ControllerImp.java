@@ -65,6 +65,8 @@ public class ControllerImp extends Controller{
         ExecutorService service = Executors.newSingleThreadExecutor();
         service.execute(() -> {
             db.identityDAO().deleteIdentity(identity);
+            db.taskDAO().deleteForgingTasks(identity.getId());
+            db.habitDAO().deleteForgingHabits(identity.getId());
         });
     }
 
@@ -134,7 +136,7 @@ public class ControllerImp extends Controller{
     public void completeHabit(Habit habit, String day) {
         CompletedHabit ch = new CompletedHabit();
         ch.setHabitId(habit.getId());
-        ch.setDay(day);
+        ch.setTimestamp(DateHelper.getTimeStamp(day));
         ExecutorService service = Executors.newSingleThreadExecutor();
         service.execute(() -> {
             db.completedHabitDAO().insert(ch);
@@ -144,7 +146,9 @@ public class ControllerImp extends Controller{
 
     @Override
     public List<CompletedHabit> getCompletedHabits(String day) {
-        return db.completedHabitDAO().getCompletedHabits(day);
+        long min = DateHelper.getTimeStamp(DateHelper.addDays(day, -15));
+        long max = DateHelper.getTimeStamp(DateHelper.addDays(day, 15));
+        return db.completedHabitDAO().getCompletedHabits(min, max);
     }
 
     @Override

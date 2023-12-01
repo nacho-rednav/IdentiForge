@@ -56,7 +56,7 @@ public class IdentityRVAdapter extends ListAdapter<Identity, IdentityRVAdapter.V
 
     @Override
     public void onBindViewHolder(@NonNull IdentityRVAdapter.ViewHolder holder, int position) {
-        Identity identity = getItem(position);
+        Identity identity = getItem(holder.getAdapterPosition());
 
         holder.titleTV.setText(identity.getTitle());
         holder.levelTV.setText("Level: " + identity.getLevel());
@@ -64,6 +64,25 @@ public class IdentityRVAdapter extends ListAdapter<Identity, IdentityRVAdapter.V
         if(identity.canLevelUp()){
             holder.imageView.setImageResource(R.drawable.green_upgrade);
         }
+
+        holder.imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Identity i = getItem(holder.getAdapterPosition());
+                parent.levelUp(getItem(holder.getAdapterPosition()));
+                if(i.getPoints() - i.getLevelUp() < i.getLevelUp())
+                    holder.imageView.setImageResource(R.drawable.upgrade);
+            }
+        });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                int position = holder.getAdapterPosition();
+                Log.d("Message", "OHO: " + getItem(position).getTitle());
+                parent.launchEdit(getItem(position));
+                return true;
+            }
+        });
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -80,23 +99,7 @@ public class IdentityRVAdapter extends ListAdapter<Identity, IdentityRVAdapter.V
             imageView = itemView.findViewById(R.id.idrow_img);
 
             // adding on click listener for each item of recycler view.
-            imageView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = getAdapterPosition();
-                    parent.levelUp(getItem(position));
 
-                }
-            });
-            itemView.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    int position = getAdapterPosition();
-                    Log.d("Message", "OHO: " + getItem(position).getTitle());
-                    parent.launchEdit(getItem(position));
-                    return true;
-                }
-            });
         }
     }
 

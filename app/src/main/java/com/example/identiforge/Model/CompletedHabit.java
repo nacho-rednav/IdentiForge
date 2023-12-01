@@ -9,7 +9,7 @@ public class CompletedHabit {
     @PrimaryKey(autoGenerate = true)
     private  int id;
 
-    private String day;
+    private long timestamp;
     private int habitId;
 
     public int getId() {
@@ -20,12 +20,12 @@ public class CompletedHabit {
         this.id = id;
     }
 
-    public String getDay() {
-        return day;
+    public long getTimestamp() {
+        return timestamp;
     }
 
-    public void setDay(String day) {
-        this.day = day;
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 
     public int getHabitId() {
@@ -37,6 +37,8 @@ public class CompletedHabit {
     }
 
     public String toString(){
-        return "Id: " + id + " Date: " + day;
+        return "Id: " + id + " Tmsp: " + timestamp;
     }
+
+
 }
