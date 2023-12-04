@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.identiforge.Model.Habit;
+import com.example.identiforge.Model.Helper;
 import com.example.identiforge.R;
 import com.example.identiforge.View.MainActivity;
 
@@ -33,6 +34,8 @@ public class HabitRVAdapter extends ListAdapter<Habit, HabitRVAdapter.ViewHolder
         @Override
         public boolean areContentsTheSame(Habit oldItem, Habit newItem) {
             // below line is to check the course name, description and course duration.
+            if(!(Helper.isSafe(oldItem) &&  Helper.isSafe(newItem)))
+                return false;
             return oldItem.getPoints() == newItem.getPoints() && oldItem.getTile().equals(newItem.getTile()) &&
                     oldItem.getIdentityId() == newItem.getIdentityId() &&
                     oldItem.getDescription().equals(newItem.getDescription()) &&

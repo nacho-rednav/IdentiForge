@@ -1,5 +1,6 @@
 package com.example.identiforge.View.TasksView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,10 @@ public class TaskRVAdapter extends ListAdapter<Task, TaskRVAdapter.ViewHolder> {
         @Override
         public boolean areContentsTheSame(Task oldItem, Task newItem) {
             // below line is to check the course name, description and course duration.
+            if(oldItem.getDay() == null) Log.d("", "Day");
+            else if(oldItem.getTitle() == null) Log.d("", "Titi");
+            else if(oldItem.getDescription() == null) Log.d("", "Desc");
+
             return oldItem.getPoints() == newItem.getPoints() &&
                     oldItem.getIdentityId() == newItem.getIdentityId() &&
                     oldItem.getDescription().equals(newItem.getDescription()) &&

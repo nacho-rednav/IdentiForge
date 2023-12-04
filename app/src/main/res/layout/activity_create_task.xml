@@ -6,9 +6,24 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="138dp"
         android:background="#C0C0C0"
         android:padding="38dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/main_smith"
+                android:layout_width="95dp"
+                android:layout_height="95dp"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:src="@mipmap/smith" />
+
+        </FrameLayout>
 
     </LinearLayout>
 
@@ -16,6 +31,8 @@
         android:id="@+id/createTask_textViewTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/metaphorbold"
+
         android:text="Title"
         android:textSize="18sp"
         android:layout_marginTop="16dp"
@@ -25,6 +42,8 @@
         android:id="@+id/createTask_editTextTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/metaphorbold"
+
         android:layout_below="@id/createTask_textViewTitle"
         android:layout_marginTop="8dp"
         android:layout_marginStart="16dp"
@@ -36,6 +55,8 @@
         android:id="@+id/createTask_textViewDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/metaphorbold"
+
         android:text="Description"
         android:textSize="18sp"
         android:layout_below="@id/createTask_editTextTitle"
@@ -46,6 +67,8 @@
         android:id="@+id/createTask_editTextDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/metaphorbold"
+
         android:layout_below="@id/createTask_textViewDescription"
         android:layout_marginTop="8dp"
         android:layout_marginStart="16dp"
@@ -57,6 +80,8 @@
         android:id="@+id/createTask_textViewPoints"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/metaphorbold"
+
         android:text="Points"
         android:textSize="18sp"
         android:layout_below="@id/createTask_editTextDescription"
@@ -67,6 +92,8 @@
         android:id="@+id/createTask_editTextPoints"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/metaphorbold"
+
         android:layout_below="@id/createTask_textViewPoints"
         android:layout_marginTop="8dp"
         android:layout_marginStart="16dp"
@@ -78,6 +105,8 @@
         android:id="@+id/createTask_textViewIdentity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/metaphorbold"
+
         android:text="Which identity does this Task forge?"
         android:layout_below="@id/createTask_editTextPoints"
         android:textSize="18sp"
@@ -98,6 +127,8 @@
         android:id="@+id/createTask_textViewDay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/metaphorbold"
+
         android:text="When does this Task happen?"
         android:layout_below="@id/createTask_identitySpinner"
         android:textSize="18sp"
@@ -108,6 +139,8 @@
         android:id="@+id/createTask_setViewDay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/metaphorbold"
+        android:textColor="#C0C0C0"
         android:layout_below="@id/createTask_textViewDay"
         android:textSize="18sp"
         android:layout_marginTop="16dp"
@@ -119,15 +152,19 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#C0C0C0"
         android:gravity="center"
         android:padding="16dp">
 
         <Button
             android:id="@+id/createTask_saveButton"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:text="Save Task" />
+            android:fontFamily="@font/metaphorbold"
+            android:layout_width="112dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="#C0C0C0"
+            android:elevation="15dp"
+            android:text="Save"
+            android:textColor="#1E0C21" />
     </LinearLayout>
 
 </LinearLayout>

@@ -6,9 +6,24 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="138dp"
         android:background="#C0C0C0"
         android:padding="38dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/main_smith"
+                android:layout_width="95dp"
+                android:layout_height="95dp"
+                android:layout_gravity="center"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:src="@mipmap/smith" />
+
+        </FrameLayout>
 
     </LinearLayout>
 
@@ -17,6 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Title"
+        android:fontFamily="@font/metaphorbold"
         android:textSize="18sp"
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp" />
@@ -25,6 +41,7 @@
         android:id="@+id/createIdentity_editTextTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/metaphorbold"
         android:layout_below="@id/createIdentity_textViewTitle"
         android:layout_marginTop="8dp"
         android:layout_marginStart="16dp"
@@ -37,6 +54,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Description"
+        android:fontFamily="@font/metaphorbold"
         android:textSize="18sp"
         android:layout_below="@id/createIdentity_editTextTitle"
         android:layout_marginTop="16dp"
@@ -46,6 +64,7 @@
         android:id="@+id/createIdentity_editTextDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/metaphorbold"
         android:layout_below="@id/createIdentity_textViewDescription"
         android:layout_marginTop="8dp"
         android:layout_marginStart="16dp"
@@ -57,6 +76,7 @@
         android:id="@+id/createIdentity_textViewLevelUpPoints"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/metaphorbold"
         android:text="Level-up points"
         android:textSize="18sp"
         android:layout_below="@id/createIdentity_editTextDescription"
@@ -67,6 +87,7 @@
         android:id="@+id/createIdentity_editTextLevelUpPoints"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/metaphorbold"
         android:layout_below="@id/createIdentity_textViewLevelUpPoints"
         android:layout_marginTop="8dp"
         android:layout_marginStart="16dp"
@@ -78,15 +99,20 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#C0C0C0"
         android:gravity="center"
         android:padding="16dp">
 
         <Button
             android:id="@+id/createIdentity_saveButton"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:text="Save Identity" />
+            android:fontFamily="@font/metaphorbold"
+            android:layout_width="112dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:backgroundTint="#C0C0C0"
+            android:elevation="15dp"
+            android:text="Save"
+            android:textColor="#1E0C21" />
+
     </LinearLayout>
 
 </LinearLayout>
