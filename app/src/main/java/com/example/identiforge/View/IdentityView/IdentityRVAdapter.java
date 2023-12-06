@@ -71,14 +71,13 @@ public class IdentityRVAdapter extends ListAdapter<Identity, IdentityRVAdapter.V
                 Identity i = getItem(holder.getAdapterPosition());
                 parent.levelUp(getItem(holder.getAdapterPosition()));
                 if(i.getPoints() - i.getLevelUp() < i.getLevelUp())
-                    holder.imageView.setImageResource(R.drawable.upgrade);
+                    holder.imageView.setImageResource(R.drawable.upgrade_circle);
             }
         });
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
                 int position = holder.getAdapterPosition();
-                Log.d("Message", "OHO: " + getItem(position).getTitle());
                 parent.launchEdit(getItem(position));
                 return true;
             }

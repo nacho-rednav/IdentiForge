@@ -127,10 +127,10 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 selectedDay = DateHelper.addDays(selectedDay, 1);
                 if(DateHelper.getTimeStamp(selectedDay) > postTimeStamp){
+                    setDayLimits();
                     loadSetFrom();
                 }
-                else
-                    reload();
+                reload();
             }
         });
         ImageView prevDayButt = findViewById(R.id.main_prevDate);
@@ -139,10 +139,10 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 selectedDay = DateHelper.addDays(selectedDay, -1);
                 if(DateHelper.getTimeStamp(selectedDay) < prevTimeStamp){
+                    setDayLimits();
                     loadSetFrom();
                 }
-                else
-                    reload();
+                reload();
             }
         });
 
@@ -201,7 +201,6 @@ public class MainActivity extends AppCompatActivity {
         service.execute(() -> {
             completedHabits = habitViewModel.loadSetFrom(selectedDay);
             seeChecked(habitAdapter.getCurrentList());
-            setDayLimits();
         });
     }
 

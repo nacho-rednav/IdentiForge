@@ -35,15 +35,11 @@ public class TaskRVAdapter extends ListAdapter<Task, TaskRVAdapter.ViewHolder> {
 
         @Override
         public boolean areContentsTheSame(Task oldItem, Task newItem) {
-            // below line is to check the course name, description and course duration.
-            if(oldItem.getDay() == null) Log.d("", "Day");
-            else if(oldItem.getTitle() == null) Log.d("", "Titi");
-            else if(oldItem.getDescription() == null) Log.d("", "Desc");
 
             return oldItem.getPoints() == newItem.getPoints() &&
                     oldItem.getIdentityId() == newItem.getIdentityId() &&
                     oldItem.getDescription().equals(newItem.getDescription()) &&
-                    oldItem.getDay().equals(newItem.getDay()) &&
+                    oldItem.getTimestamp() == newItem.getTimestamp() &&
                     oldItem.getTitle().equals(newItem.getTitle());
         }
     };

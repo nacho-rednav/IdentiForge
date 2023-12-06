@@ -8,8 +8,8 @@
         android:layout_width="match_parent"
         android:layout_height="111dp"
         android:background="#C0C0C0"
-        android:paddingTop="40dp"
-        android:paddingBottom="20dp">
+        android:paddingTop="60dp"
+        android:paddingBottom="10dp">
 
         <ImageView
             android:id="@+id/main_prevDate"
@@ -61,7 +61,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:padding="16dp">
+        android:paddingBottom="8dp">
 
         <androidx.cardview.widget.CardView
             xmlns:android="http://schemas.android.com/apk/res/android"

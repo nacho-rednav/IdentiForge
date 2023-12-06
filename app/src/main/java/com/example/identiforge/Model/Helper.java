@@ -25,7 +25,7 @@ public class Helper {
     }
 
     public static String formatPoints(int points, int levelUp) {
-        float progress = points/levelUp;
+        float progress = (float) points/ (float) levelUp;
         String res = "Points: ";
         if(progress == 0) res += points + " ------> " + levelUp;
         else if (progress < 0.4) res += "-- " + points + " -----> " + levelUp;
