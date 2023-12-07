@@ -12,6 +12,10 @@ import android.widget.Toast;
 import com.example.identiforge.Model.Helper;
 import com.example.identiforge.R;
 
+/*
+* Class to create or edit an identity
+* If in the Bundle it receives an Identity it triggers Edit functionality
+* */
 public class CreateIdentity extends AppCompatActivity {
 
     public static final String TITLE_EXTRA = "title";

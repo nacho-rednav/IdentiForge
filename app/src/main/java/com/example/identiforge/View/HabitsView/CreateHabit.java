@@ -20,6 +20,11 @@ import com.example.identiforge.R;
 
 import java.util.ArrayList;
 
+
+/*
+* Class to create or edit an Habit
+* If in the Bundle it receives an Habit, it triggers the Edit functionality
+* */
 public class CreateHabit extends AppCompatActivity {
 
     public static final String ID_EXTRA = "id";

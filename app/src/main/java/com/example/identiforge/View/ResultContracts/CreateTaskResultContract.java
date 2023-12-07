@@ -22,6 +22,10 @@ import java.util.ArrayList;
 public class CreateTaskResultContract extends ActivityResultContract<Pair<Task, ArrayList<String>>, Pair<Pair<Task,String>, Boolean>> {
     @NonNull
     @Override
+    /*
+     * The Task of the pair must exist if you want to trigger Edit functionality of that Task
+     * The ArrayList is the list of existing Identities
+     * */
     public Intent createIntent(@NonNull Context context, Pair<Task, ArrayList<String>> input) {
         Intent intent = new Intent(context, CreateTask.class);
         if(Helper.isSafe(input)){
@@ -45,6 +49,11 @@ public class CreateTaskResultContract extends ActivityResultContract<Pair<Task, 
     }
 
     @Override
+    /*
+     * The first pair contains the Task created and the Title of the identity selected, which
+     * will be translated to an task id in the calling Activity
+     * The Boolean is a flag to know if the Task is new or is an edit
+     * */
     public Pair<Pair<Task, String>, Boolean> parseResult(int i, @Nullable Intent intent) {
         Pair<Pair<Task, String>, Boolean> res = null;
 

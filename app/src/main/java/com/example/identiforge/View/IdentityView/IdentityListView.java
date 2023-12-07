@@ -31,6 +31,9 @@ import com.example.identiforge.View.ResultContracts.CreateIdentityResultContract
 
 import java.util.List;
 
+/*
+* Class that shows all identities stored by the user
+* */
 public class IdentityListView extends AppCompatActivity {
 
     private IdentityViewModel viewModel;
@@ -71,7 +74,7 @@ public class IdentityListView extends AppCompatActivity {
 
         activityCameraLauncher = registerForActivityResult(new ActivityResultContracts.TakePicture(),
                 result -> {
-
+                    //The image is stored, nothing to do with the result
                 });
 
         viewModel = new ViewModelProvider(this).get(IdentityViewModel.class);
@@ -140,6 +143,7 @@ public class IdentityListView extends AppCompatActivity {
         Toast.makeText(this, "Identity deleted", Toast.LENGTH_SHORT).show();
     }
 
+    //Identities are deleted when swiped right, but before an Alert Dialog is shown
     private void initItemTouchHelper(){
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
             @Override

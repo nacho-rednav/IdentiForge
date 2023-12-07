@@ -40,6 +40,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
 
+/*
+* Class that shows the Habits and Tasks of the selected day
+* Habits are shown based on the weekday and Tasks based on the date (dd-mm-yyyy)
+* To check if an Habit has been completed for a given day, a HashSet is stored which stores all
+* pairs of HabitId - Timestamp. Each pair means that an Habit has been completed in the given timestamp
+* which represents a day.
+* The Set is refreshed whenever the user moves 15 days
+* */
 public class MainActivity extends AppCompatActivity {
 
     private HabitViewModel habitViewModel;
@@ -191,11 +199,14 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //Changes the day limits when a new Set is loaded
     private void setDayLimits() {
         prevTimeStamp = DateHelper.getTimeStamp(DateHelper.addDays(selectedDay, -15));
         postTimeStamp = DateHelper.getTimeStamp(DateHelper.addDays(selectedDay, 15));
     }
 
+
+    //Loads a new Set for the Completed Habits
     private void loadSetFrom() {
         ExecutorService service = Executors.newSingleThreadExecutor(new PriorityThreadFactory(Thread.MAX_PRIORITY));
         service.execute(() -> {
@@ -204,6 +215,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
+    //Checks which Habits have been completed in the current selected day
     private void seeChecked(List<Habit> list) {
         long tmsp = DateHelper.getTimeStamp(selectedDay);
         for(Habit h : list){
@@ -216,6 +229,8 @@ public class MainActivity extends AppCompatActivity {
         //habitRV.setAdapter(habitAdapter);
     }
 
+
+    //Changes date displayed
     private void setDate() {
         TextView dayTV = findViewById(R.id.main_date);
         dayTV.setText(selectedDay + "\n" + DateHelper.getCurrentWekDay(selectedDay));
@@ -288,6 +303,7 @@ public class MainActivity extends AppCompatActivity {
     public void deleteTask(Task t){taskViewModel.deleteTask(t, selectedDay);}
 
 
+    //Called when the day is changed to get the new lists
     private void reload() {
         setDate();
         habitViewModel.refreshHabits(selectedDay);
@@ -339,6 +355,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //Tasks and habits are deleted when swiped right
     private void initItemTouchHelper(){
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
             @Override

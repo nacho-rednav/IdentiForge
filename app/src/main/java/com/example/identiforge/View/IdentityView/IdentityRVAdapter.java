@@ -64,6 +64,9 @@ public class IdentityRVAdapter extends ListAdapter<Identity, IdentityRVAdapter.V
         if(identity.canLevelUp()){
             holder.imageView.setImageResource(R.drawable.green_upgrade);
         }
+        else{
+            holder.imageView.setImageResource(R.drawable.upgrade_circle);
+        }
 
         holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override

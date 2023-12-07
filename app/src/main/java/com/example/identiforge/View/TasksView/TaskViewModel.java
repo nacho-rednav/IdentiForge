@@ -19,7 +19,7 @@ public class TaskViewModel extends ViewModel {
     private Controller controller;
     public void init(Application app){
         controller = Controller.get(app);
-        list = controller.getTasks(DateHelper.getCurrentDate());
+        list = controller.getTasks();
     }
     public void insertTask(Task task, String day) {
         controller.insertTask(task, day);

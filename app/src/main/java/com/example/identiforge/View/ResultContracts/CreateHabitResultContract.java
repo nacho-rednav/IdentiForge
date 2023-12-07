@@ -22,6 +22,10 @@ import java.util.ArrayList;
 public class CreateHabitResultContract extends ActivityResultContract<Pair<Habit, ArrayList<String>>, Pair<Pair<Habit,String>, Boolean>> {
     @NonNull
     @Override
+    /*
+    * The Habit of the pair must exist if you want to trigger Edit functionality of that Habit
+    * The ArrayList is the list of existing Identities
+    * */
     public Intent createIntent(@NonNull Context context, Pair<Habit, ArrayList<String>> input) {
         Intent intent = new Intent(context, CreateHabit.class);
         if(Helper.isSafe(input)){
@@ -50,6 +54,11 @@ public class CreateHabitResultContract extends ActivityResultContract<Pair<Habit
     }
 
     @Override
+    /*
+    * The first pair contains the Habit created and the Title of the identity selected, which
+    * will be translated to an identity id in the calling Activity
+    * The Boolean is a flag to know if the Habit is new or is an edit
+    * */
     public Pair<Pair<Habit,String>, Boolean> parseResult(int i, @Nullable Intent intent) {
         Pair<Pair<Habit,String>, Boolean> res = null;
 

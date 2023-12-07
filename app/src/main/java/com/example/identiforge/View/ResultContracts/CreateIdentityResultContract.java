@@ -32,6 +32,9 @@ public class CreateIdentityResultContract extends ActivityResultContract<Identit
     }
 
     @Override
+    /*
+    * The Boolean is a flag to know if the Identity is new or is an Edit
+    * */
     public Pair<Identity, Boolean> parseResult(int i, @Nullable Intent intent) {
         Pair<Identity, Boolean> res = null;
         if(i == RESULT_OK && intent != null){

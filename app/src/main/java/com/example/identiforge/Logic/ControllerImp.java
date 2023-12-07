@@ -20,6 +20,15 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/*
+* The controller is the repository of the app
+* It stores Live Data of identities and Mutable Live Data of Tasks and Habits
+* Mutable Live Data is used because we need to change the whole list stored inside the
+* Live Data when the day is changed, for which we need the post method
+*
+* The Controller receives days (dd-mm-yyyy) from the Views, but the DAO works with timestamps
+* There is a function in the DateHelper to do the transformation
+* */
 public class ControllerImp extends Controller{
 
     private IdentiForgeDB db;
@@ -185,7 +194,7 @@ public class ControllerImp extends Controller{
     }
 
     @Override
-    public LiveData<List<Task>> getTasks(String day) {
+    public LiveData<List<Task>> getTasks() {
         return mutableTasks;
     }
 
@@ -194,7 +203,6 @@ public class ControllerImp extends Controller{
         ExecutorService service = Executors.newSingleThreadExecutor();
         service.execute(() -> {
             List<Task> list = db.taskDAO().getTasks(DateHelper.getTimeStamp(day));
-            Log.d("D","Taskssize: " + list);
             mutableTasks.postValue(list);
         });
     }

@@ -50,19 +50,6 @@ public class HabitViewModel extends ViewModel {
         controller.completeHabit(habit, day);
     }
 
-    public HashSet<Integer> getCompletedHabitsMap(String day) {
-        HashSet<Integer> result = new HashSet<>();
-        List<CompletedHabit> completedHabits = controller.getCompletedHabits(day);
-        Log.d("fd", "VM List: " + completedHabits);
-        if(completedHabits!= null){
-            for(CompletedHabit ch : completedHabits){
-                result.add(ch.getHabitId());
-            }
-        }
-
-        return result;
-    }
-
     public int getIdentityFromTitle(String idTitle) {
         return controller.getIdentityFromTitle(idTitle);
     }
@@ -76,6 +63,10 @@ public class HabitViewModel extends ViewModel {
         return idTitle.getTitle();
     }
 
+    /*
+    * Function that gets the Set of completed Habits in a range of month having selectedDay as the
+    * middle day
+    * */
     public HashSet<Pair<Integer, Long>> loadSetFrom(String selectedDay) {
         HashSet<Pair<Integer, Long>> result = new HashSet<>();
         List<CompletedHabit> completedHabits = controller.getCompletedHabits(selectedDay);

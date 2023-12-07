@@ -19,11 +19,20 @@ import java.util.List;
 
 public class Helper {
 
+    /*
+    * Function to get the query for List<Habit> getHabitsSynchronous(SupportSQLiteQuery habitDayQuery)
+    * @param String day : day to search habit (day of the week monday, tuesday...)
+    * @return SimpleSQLiteQuery
+    * */
     public static SupportSQLiteQuery getHabitDayQuery(String day){
         String query = "SELECT * FROM Habit WHERE " + day + " = 1;";
         return new SimpleSQLiteQuery(query);
     }
 
+
+    /*
+    * Function to show points progress in identities
+    * */
     public static String formatPoints(int points, int levelUp) {
         float progress = (float) points/ (float) levelUp;
         String res = "Points: ";
@@ -35,6 +44,10 @@ public class Helper {
         return res;
     }
 
+    /*
+    * Function to check if a object has any dangerous value
+    * like null or an empty String or List
+    * */
     public static boolean isSafe(Object o){
         if(o == null) return false;
         if(o instanceof String && (o == "" || o == " ")) return false;
@@ -42,6 +55,10 @@ public class Helper {
         return true;
     }
 
+    /*
+    * Function from StackOverFlow
+    * Function to get an uri to store an image
+    * */
     public static Uri getUri(Context context,String title, int level) {
         Uri images;
         ContentResolver cr = context.getContentResolver();
