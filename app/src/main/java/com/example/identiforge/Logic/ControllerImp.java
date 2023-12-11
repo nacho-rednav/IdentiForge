@@ -164,8 +164,6 @@ public class ControllerImp extends Controller{
     public void insertTask(Task task, String day) {
         ExecutorService service = Executors.newSingleThreadExecutor();
         service.execute(() -> {
-            Log.d("D","TASK dia: " + task.getDay());
-            Log.d("D","dia: " + day);
             db.taskDAO().insertTask(task);
             List<Task> list = db.taskDAO().getTasks(DateHelper.getTimeStamp(day));
             mutableTasks.postValue(list);
@@ -176,7 +174,6 @@ public class ControllerImp extends Controller{
     public void updateTask(Task task, String day) {
         ExecutorService service = Executors.newSingleThreadExecutor();
         service.execute(() -> {
-            Log.d("D", "UPDATE: " + task.getDay());
             db.taskDAO().updateTask(task);
             List<Task> list = db.taskDAO().getTasks(DateHelper.getTimeStamp(day));
             mutableTasks.postValue(list);
